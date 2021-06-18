@@ -3,5 +3,6 @@
   "test": {
     "url": "love",
     "test_var": "foobar"
-  }
+  },
+  "MONGO_KEY": "mongodb://parth:parth@cluster0-shard-00-00.ktntg.mongodb.net:27017,cluster0-shard-00-01.ktntg.mongodb.net:27017,cluster0-shard-00-02.ktntg.mongodb.net:27017/vidly?ssl=true&replicaSet=atlas-w6ruuc-shard-0&authSource=admin&retryWrites=true&w=majority"
 }

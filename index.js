@@ -1,10 +1,30 @@
 // external imports
 const debug = require("debug")("app:test_debugger");
 const config = require("config");
+// check usage of morgan & helmet
 const morgan = require("morgan");
 const helmet = require("helmet");
 const express = require("express");
+
+// mongoose connect to db
+const mongoose = require("mongoose");
+mongoose.connect(config.get("MONGO_KEY"), {
+  useNewUrlParser: true,
+  useUnifiedTopology: true,
+  useFindAndModify: false,
+  useCreateIndex: true,
+});
+
+mongoose.connection.on("connected", () => {
+  console.log("connected to mongo db...");
+});
+
+mongoose.connection.on("error", (error) => {
+  console.log("error when connecting mongo db...", error);
+});
+
 // route imports
+const customers = require("./routes/customers");
 const genres = require("./routes/genres");
 const home = require("./routes/home");
 // middleware imports
@@ -26,22 +46,19 @@ app.use(express.static("public"));
 // check these middleware
 app.use(helmet());
 
-// custom middleware
-app.use(logger);
+// custom middleware demo
+// app.use(logger);
 
 // routes
+app.use("/api/customers", customers);
 app.use("/api/genres", genres);
 app.use("/", home);
 
 // logs only in case of development mode
 if (app.get("env") === "development") app.use(morgan("tiny"));
-// decides based on DEBUG environment variable whether to log this statement
-debug("hello");
 
-// read config
-console.log("port: ", process.env.PORT);
-console.log("Node_env: ", process.env.NODE_ENV);
-console.log("test_var: ", config.get("test.test_var"));
+// decides based on DEBUG environment variable whether to log this statement demo
+// debug("hello");
 
 const port = process.env.PORT || 3000;
 app.listen(port, () => console.log(`Listening on port ${port}...`));
